@@ -2,6 +2,6 @@
 
 def call(String name = 'human') {
   echo "Hello, ${name}."
-  echo "its wild this works"
-  python{command("python --version")}
+  echo "should be packing way more in here"
+  
 }
