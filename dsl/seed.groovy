@@ -71,6 +71,42 @@ fi
     }  
 }
 
+def pythonTestJob(){
+    job('python-test') {
+	wrappers {
+          colorizeOutput('xterm')
+    }
+  	parameters {
+        activeChoiceParam('CHOICE-1') {
+            description('Allows user choose from multiple choices')
+            filterable()
+            choiceType('SINGLE_SELECT')
+            groovyScript {
+                script('["Sao Paulo", "Rio de Janeiro", "Parana:selected", "Acre"]')
+                fallbackScript('"fallback choice"')
+            }
+        }
+      	fileParam('MaintHtml', 'my description')
+    }
+    steps {
+      python{
+        command("for i in 1 2 3 4 5; do echo \"Welcome\"; done")
+      }
+      
+      python{
+        command('''
+
+				if [ -f ./MaintHtml ]; then
+                 echo "we here"
+                fi''')
+      }
+
+      shell("ls -al")
+      shell("cat MaintHtml")
+      
+    }
+    }
+}
 
 def buildPipelineJobs() {
     //def repo = "https://github.com/"
