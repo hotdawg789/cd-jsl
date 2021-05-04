@@ -33,6 +33,45 @@ def createTestJob(jobName, repoUrl) {
     }
 }
 
+def emailjob() {
+    job("emailjoba") {
+        publishers {
+                extendedEmail {
+                recipientList('hotdawg789@gmail.com')
+                attachBuildLog(true)
+                    triggers {
+                        failure {
+                        subject(" disk running out of space")
+                        content("\${FILE,path=\"bingo.json\"}")
+                        sendTo{
+                            recipientList()
+                        }
+                        }
+                    }
+                }
+                wsCleanup()
+        }
+        properties {
+            rebuild {
+                rebuildDisabled(false)
+            }
+        }
+        concurrentBuild(true)
+        steps {
+            shell {
+            command(""" 
+#!/bin/bash
+echo "{I can  without double quotes}" >> ./bingo.json
+if ! [[ -f ./DISKSasdfasdfPACEDOUT.json ]]; then
+    exit 1
+fi
+            """)
+            }
+        }
+    }  
+}
+
+
 def buildPipelineJobs() {
     //def repo = "https://github.com/"
     // def repoUrl = repo + jobName + ".git"
